@@ -64,16 +64,4 @@ class ConverterServiceTest {
         assertTrue(transactionList.isNotEmpty())
     }
 
-    @Test
-    fun `should get success on call a external api to request the rates when is a valid currency`() {
-        val result = converterTransactionService.getRates("USD")
-        assertTrue(result.isSuccess)
-    }
-
-    @Test
-    fun `should get failure on call a external api to request the rates when is a invalid currency`() {
-        val result = converterTransactionService.getRates("ASD")
-        assertTrue(result.isFailure)
-    }
-
 }

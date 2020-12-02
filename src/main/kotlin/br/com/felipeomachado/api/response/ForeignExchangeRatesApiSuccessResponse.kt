@@ -1,4 +1,4 @@
-package br.com.felipeomachado.entities.response
+package br.com.felipeomachado.api.response
 
 import java.time.LocalDate
 
