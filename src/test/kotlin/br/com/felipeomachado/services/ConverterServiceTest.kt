@@ -3,9 +3,16 @@ package br.com.felipeomachado.services
 import br.com.felipeomachado.db.DatabaseInitializer
 import br.com.felipeomachado.entities.request.ConverterTransactionRequest
 import br.com.felipeomachado.entities.response.ConverterTransactionResponse
+import br.com.felipeomachado.repositories.ConverterTransactionRepository
 import br.com.felipeomachado.repositories.converterTransactionRepositoryModule
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.unmockkAll
 import org.jetbrains.exposed.sql.Database
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
@@ -14,22 +21,20 @@ import org.koin.test.KoinTestRule
 import kotlin.test.assertTrue
 
 
-class ConverterServiceTest : KoinTest {
+class ConverterServiceTest  {
+    @RelaxedMockK
+    lateinit var repository : ConverterTransactionRepository
 
+    lateinit var converterTransactionService : ConverterTransactionService
 
-    private val converterTransactionService by inject<ConverterTransactionService>()
-
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        printLogger()
-        modules(converterTransactionRepositoryModule, converterTransactionServiceModule)
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this)
+        converterTransactionService = ConverterTransactionService(repository)
     }
 
     @Test
     fun `should convert currency`() {
-        Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
-        DatabaseInitializer.createSchemaAndTestData()
-
         val userId = 1L
         val sourceCurrency = "USD"
         val sourceValue = 1.00
@@ -37,24 +42,17 @@ class ConverterServiceTest : KoinTest {
 
         val result: Result<ConverterTransactionResponse> =  converterTransactionService.convert(ConverterTransactionRequest(userId, sourceCurrency, sourceValue, targetCurrency))
 
-
-
         assertTrue(result.isSuccess)
         assertEquals("Target Value was not correct", sourceValue * result.getOrNull()?.conversionRate!!,
-            result.getOrNull()?.targetValue!!, 0.0)
+                result.getOrNull()?.targetValue!!, 0.0)
     }
 
     @Test
     fun `should return error when trying to convert an source currency that does not supported`() {
-        Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
-        DatabaseInitializer.createSchemaAndTestData()
-
         val userId = 1L
         val sourceCurrency = "ASD"
         val sourceValue = 1.00
         val targetCurrency = "BRL"
-
-
 
         val result: Result<ConverterTransactionResponse> =  converterTransactionService.convert(ConverterTransactionRequest(userId, sourceCurrency, sourceValue, targetCurrency))
 
@@ -76,15 +74,22 @@ class ConverterServiceTest : KoinTest {
     }
 
     @Test
-    fun `should get all transaction by user`() {
-        Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
-        DatabaseInitializer.createSchemaAndTestData()
-
+    fun `should get all converter transaction by user`() {
         val userId = 5L
+
+        every { repository.findAllByUser(userId) } returns listOf(
+                ConverterTransactionResponse(1, 5, "BRL", 2.0, "USD", 10.0, 5.0, "2020-12-04T14:30:50"))
 
         val transactionList: List<ConverterTransactionResponse> =  converterTransactionService.getAllTransactionsByUser(userId)
 
+        println(transactionList)
+
         assertTrue(transactionList.isNotEmpty())
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
 }
