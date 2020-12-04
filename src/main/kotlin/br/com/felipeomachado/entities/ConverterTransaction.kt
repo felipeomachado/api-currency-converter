@@ -1,15 +1,25 @@
 package br.com.felipeomachado.entities
 
+import br.com.felipeomachado.db.ConverterTransactions
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 import java.time.LocalDateTime
 
-data class ConverterTransaction (
-        val id: Long?,
-        val userId: Long,
-        val sourceCurrency: String,
-        val sourceValue: Double,
-        val targetCurrency: String,
-        val targetValue: Double,
-        val conversionRate: Double,
-        val dateTime: LocalDateTime = LocalDateTime.now(),
-)
 
+class ConverterTransaction(id: EntityID<Long>?) : LongEntity(id!!) {
+    companion object : LongEntityClass<ConverterTransaction>(ConverterTransactions)
+
+    var userId by ConverterTransactions.userId
+    var sourceCurrency by ConverterTransactions.sourceCurrency
+    var sourceValue by ConverterTransactions.sourceValue
+    var targetCurrency by ConverterTransactions.targetCurrency
+    var targetValue by ConverterTransactions.targetValue
+    var conversionRate by ConverterTransactions.conversionRate
+    var dateTime: LocalDateTime by ConverterTransactions.dateTime
+
+
+
+
+
+}

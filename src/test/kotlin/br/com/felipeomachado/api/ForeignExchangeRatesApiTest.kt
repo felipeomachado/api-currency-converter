@@ -13,6 +13,7 @@ class ForeignExchangeRatesApiTest : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
+        printLogger()
         modules(foreignExchangeRatesApiModuleModule)
     }
 
