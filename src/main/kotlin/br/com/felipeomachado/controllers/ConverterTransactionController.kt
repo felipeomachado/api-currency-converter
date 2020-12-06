@@ -1,6 +1,7 @@
 package br.com.felipeomachado.controllers
 
 import br.com.felipeomachado.entities.request.ConverterTransactionRequest
+import br.com.felipeomachado.entities.response.ConverterTransactionResponse
 import br.com.felipeomachado.repositories.ConverterTransactionRepository
 import br.com.felipeomachado.services.ConverterTransactionService
 import io.javalin.http.Context
@@ -24,8 +25,13 @@ class ConverterTransactionController: KoinComponent {
         }
     }
 
-    fun listTransactionsByUser(ctx: Context) {
-        val converterTransactionService = ConverterTransactionService(ConverterTransactionRepository())
-        ctx.json(converterTransactionService.getAllTransactionsByUser(ctx.pathParam("user-id").toLong()))
+    fun listTransactionsByUser(ctx: Context)  {
+        try {
+            val userId = ctx.pathParam("user-id").toLong()
+            ctx.json(converterTransactionService.getAllTransactionsByUser(userId))
+        }catch (exception: Exception) {
+            ctx.status(400).json("Invalid User Id")
+        }
+
     }
 }

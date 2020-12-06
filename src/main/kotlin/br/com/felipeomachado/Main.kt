@@ -38,8 +38,8 @@ class Main {
                 error(404) { ctx -> ctx.json("Resource not found") }
             }
                     .get("/") { ctx -> ctx.result("Service Online") }
-                    .post("/api/v1/converter") { ctx -> ConverterTransactionController().convertCurrency(ctx) }
-                    .get("/api/v1/transaction/:user-id") { ctx ->ConverterTransactionController().listTransactionsByUser(ctx) }
+                    .post("/api/v1/convert") { ctx -> ConverterTransactionController().convertCurrency(ctx) }
+                    .get("/api/v1/transactions/user/:user-id") { ctx ->ConverterTransactionController().listTransactionsByUser(ctx) }
                     .start(7000)
         }
     }
