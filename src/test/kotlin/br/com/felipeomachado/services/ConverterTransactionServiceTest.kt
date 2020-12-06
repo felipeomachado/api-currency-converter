@@ -1,27 +1,20 @@
 package br.com.felipeomachado.services
 
-import br.com.felipeomachado.db.DatabaseInitializer
 import br.com.felipeomachado.entities.request.ConverterTransactionRequest
 import br.com.felipeomachado.entities.response.ConverterTransactionResponse
 import br.com.felipeomachado.repositories.ConverterTransactionRepository
-import br.com.felipeomachado.repositories.converterTransactionRepositoryModule
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
-import org.jetbrains.exposed.sql.Database
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.koin.test.KoinTest
-import org.koin.test.inject
-import org.koin.test.KoinTestRule
 import kotlin.test.assertTrue
 
 
-class ConverterServiceTest  {
+class ConverterTransactionServiceTest  {
     @RelaxedMockK
     lateinit var repository : ConverterTransactionRepository
 

@@ -1,8 +1,5 @@
 package br.com.felipeomachado.entities.response
 
-import br.com.felipeomachado.entities.ConverterTransaction
-import java.time.LocalDateTime
-
 class ConverterTransactionResponse(
     val transactionId: Long,
     val userId: Long,
