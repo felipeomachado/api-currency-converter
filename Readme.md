@@ -140,4 +140,4 @@ Caso seja passado um id de usuário inválido, é retornanda a seguinte mensagem
 ```
 
 ### Live Demo
-http://34.230.19.53:7000/
+http://ec2-52-91-158-166.compute-1.amazonaws.com:7000/
